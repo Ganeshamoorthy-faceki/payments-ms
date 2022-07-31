@@ -10,57 +10,52 @@ import { SubscriptionControllers } from '../controllers/SubscriptionControllers'
 import { CardsControllers } from '../controllers/CardsControllers';
 import { AuthMiddleware } from '../middlewares/AuthMiddleware';
 // import CognitoExpress from 'cognito-express';
-import PayPal from "../services/paypal.services";
 
-const paypal = new PayPal({
-    sandboxMode: true,
-    clientID: 'AcubC_y2SF1SIL5zFFpUs3WwwKChk13argXB3VCdSfv7li-A3zHcItmGwXa489-c7EiOqgLZxL-XNfJM',
-    clientSecret: 'EHuXYkDRaMvmWsfLEmC-doEY0QGpt0Moi80IaByG4wOfLSPx01fHy5qjXmavZy3s5cIQ6kwW8AzN6ZNc'
-});
 
-paypal.createProduct({
-    name: "KYC",
-    description: "Biometric Authentication & Sign-in",
-    type: "SERVICE",
-    category: "SOFTWARE",
-    image_url: "https://faceki.com/wp-content/uploads/2021/02/cropped-2-FACEKI-Logo-Transparent-1-1.png",
-    home_url: "https://faceki.com/biometric-authentication-prices/"
-});
 
-paypal.listProducts().then(console.log);
+// paypal.createProduct({
+//     name: "KYC",
+//     description: "Biometric Authentication & Sign-in",
+//     type: "SERVICE",
+//     category: "SOFTWARE",
+//     image_url: "https://faceki.com/wp-content/uploads/2021/02/cropped-2-FACEKI-Logo-Transparent-1-1.png",
+//     home_url: "https://faceki.com/biometric-authentication-prices/"
+// });
 
-paypal.createPlan({
-    product_id: "PROD-39V636255E437301X",
-    name: 'PRO',
-    description: 'PRO plan KYC',
-    billing_cycles: [
-        {frequency: {
-            interval_unit: 'DAY',
-            interval_count: 1,
-        },
-        tenure_type: 'REGULAR',
-        sequence: 1,
-        pricing_scheme: {
-            fixed_price: {
-                currency_code: 'USD',
-                value:'1',
-            }
-        }
-    }],
-    payment_preferences: {
-        auto_bill_outstanding: true,
-        setup_fee: {
-            currency_code: 'USD',
-            value:'1',
-        },
-        setup_fee_failure_action: 'CONTINUE',
-        payment_failure_threshold: 3
-    },
-    taxes: {
-        percentage: '1',
-        inclusive: false
-    }
-}).then(console.log);
+// paypal.listProducts().then(console.log);
+
+// paypal.createPlan({
+//     product_id: "PROD-39V636255E437301X",
+//     name: 'PRO',
+//     description: 'PRO plan KYC',
+//     billing_cycles: [
+//         {frequency: {
+//             interval_unit: 'DAY',
+//             interval_count: 1,
+//         },
+//         tenure_type: 'REGULAR',
+//         sequence: 1,
+//         pricing_scheme: {
+//             fixed_price: {
+//                 currency_code: 'USD',
+//                 value:'1',
+//             }
+//         }
+//     }],
+//     payment_preferences: {
+//         auto_bill_outstanding: true,
+//         setup_fee: {
+//             currency_code: 'USD',
+//             value:'1',
+//         },
+//         setup_fee_failure_action: 'CONTINUE',
+//         payment_failure_threshold: 3
+//     },
+//     taxes: {
+//         percentage: '1',
+//         inclusive: false
+//     }
+// }).then(console.log);
 
 const port = 8001//config.get('express.port');
 
