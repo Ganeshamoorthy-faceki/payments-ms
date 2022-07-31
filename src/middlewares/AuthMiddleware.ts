@@ -1,10 +1,10 @@
 const jwt = require('jsonwebtoken')
-const Client = require('../models/client')
 
 
 import { NextFunction, Request, Response } from 'express';
 import { ExpressMiddlewareInterface, Middleware } from 'routing-controllers';
 import { logger } from '../common/logger';
+import { Client } from '../models/Client';
 
 @Middleware({ type: 'before' })
 export class AuthMiddleware implements ExpressMiddlewareInterface {
