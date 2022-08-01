@@ -70,7 +70,7 @@ export class Application{
       cors:{
         origin:"*"
       },
-      // controllers: [PaymentControllers,SubscriptionControllers, CardsControllers],
+       controllers: [PaymentControllers,SubscriptionControllers, CardsControllers],
       // authorizationChecker: async (action: Action, roles?: string[]) => {
       //   const token = action.request.headers["authorization"];
       //   if (action.request.method=="POST" || action.request.method=="GET"){
