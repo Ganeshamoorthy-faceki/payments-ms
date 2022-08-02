@@ -7,7 +7,7 @@ export class SuccessResponse {
     @IsString()
     public status: string;
 
-    @JSONSchema({ example: 'Success operation' })
+    @JSONSchema({ example: 'Success' })
     @IsString()
     public message: string;
 }

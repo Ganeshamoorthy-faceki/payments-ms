@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken')
 import { NextFunction, Request, Response } from 'express';
 import { ExpressMiddlewareInterface, Middleware } from 'routing-controllers';
 import { logger } from '../common/logger';
+import { ErrorResponse } from '../controllers/responses/ErrorResponse';
 import { Client } from '../models/Client';
 
 @Middleware({ type: 'before' })
@@ -23,7 +24,8 @@ export class AuthMiddleware implements ExpressMiddlewareInterface {
     
             next()
         }catch(e) {
-            res.status(401).send({error:'Authentication failed...'})
+            res.status(404)
+           res.send();
         }
     }
 };

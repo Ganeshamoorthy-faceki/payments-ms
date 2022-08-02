@@ -1,7 +1,12 @@
-import { HttpError } from 'routing-controllers';
+import { ErrorMessages } from '../../common/ErrorMessage';
+import HttpException from '../../exception/HttpException';
 
-export class UserNotFoundError extends HttpError {
+export class UserNotFoundError extends HttpException {
   constructor() {
-    super(404, 'User not found!');
+    console.log("USER::::::::::::::::::::::::")
+    super(404, ErrorMessages.USERNOTFOUND);
   }
 }
+
+
+ 

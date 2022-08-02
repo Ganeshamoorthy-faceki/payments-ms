@@ -22,7 +22,7 @@ class TapService {
   public headerconfig:HeaderOptions;
   constructor (options: TapOptions) {
       this.sandboxMode = options.sandboxMode
-      this.baseURL = this.sandboxMode ? 'https://api.sandbox.tap.company.com' : 'https://api.tap.company.com'
+      this.baseURL = 'https://api.tap.company'
       this.secretApiKey = options.secretApiKey;
       const config = {
         headers: { Authorization: `Bearer ${options.secretApiKey}`,
@@ -32,36 +32,57 @@ class TapService {
   }
 
 
-  private async request (url: string, method: Method, options?: AxiosRequestConfig) {
+  private async request (apiName:string, url: string, method: Method, options?: AxiosRequestConfig, headers?: HeaderOptions) {
    
-    
+
+try{
     const value = await axios(url, {
         ...{
             method
         },
         ...options,
-        ...this.headerconfig
+        ...headers
     })
+  
+
     return value
+  }catch(e){
+    if (axios.isAxiosError(e)) {
+      // do something
+      // or just re-throw the error
+      throw e;
+    } else {
+      // do something else
+      // or creating a new error
+      throw new Error(`${apiName} failed`,);
+    }
+    // const { response } = e;
+    // const { request, ...errorObject } = response; // take everything but 'request'
+    // throw new Error(JSON.stringify(errorObject.data.errors));
+  }
 }
     public verifyCard = async ( data: Partial <CreateVerifyCardOptions>): Promise<CreateVerifyCardSuccess> => {
      
 
-      const res = await this.request(
+    
+      const res = await this.request( 'Verify Card',
           `${this.baseURL}/v2/card/verify`, 'POST', {
             data
-        });
+        },this.headerconfig);
         return res.data
+      
+
 
 
     }
 
     public tapCreateSubscription = async ( data: Partial <SubscriptionCreateOptions>): Promise<SubscriptionCreateSuccess>  => {
        
-        const res = await this.request(
+        const res = await this.request('Create Subscription',
           `${this.baseURL}/v2/subscription/v1`, 'POST', {
             data
-        });
+        }, this.headerconfig);
+        
         return res.data;
     }
 }

@@ -9,6 +9,7 @@ import { SecurityMiddleware } from '../middlewares/SecurityMiddleware';
 import { SubscriptionControllers } from '../controllers/SubscriptionControllers';
 import { CardsControllers } from '../controllers/CardsControllers';
 import { AuthMiddleware } from '../middlewares/AuthMiddleware';
+import { ErrorHandlerMiddleware } from '../middlewares/ErrorHandlerMiddleware';
 // import CognitoExpress from 'cognito-express';
 
 
@@ -57,7 +58,7 @@ import { AuthMiddleware } from '../middlewares/AuthMiddleware';
 //     }
 // }).then(console.log);
 
-const port = 8001//config.get('express.port');
+const port = 3000//config.get('express.port');
 
 export class Application{
   server:any;
@@ -71,7 +72,7 @@ export class Application{
         origin:"*"
       },
        controllers: [PaymentControllers,SubscriptionControllers, CardsControllers],
-      // authorizationChecker: async (action: Action, roles?: string[]) => {
+       authorizationChecker: async (action: Action, roles?: string[]) => {
       //   const token = action.request.headers["authorization"];
       //   if (action.request.method=="POST" || action.request.method=="GET"){
       //     return true;
@@ -88,8 +89,9 @@ export class Application{
       //   }
         
       //   // return token!=null;
-      // },
-      middlewares:[LoggingMiddleware, AuthMiddleware, SecurityMiddleware]
+      return true;
+      },
+      middlewares:[LoggingMiddleware,  SecurityMiddleware, ErrorHandlerMiddleware]
     }); 
     attachSwagger(this.app);
    
