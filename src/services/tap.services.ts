@@ -1,4 +1,5 @@
 import axios, { AxiosRequestConfig, Method } from 'axios'
+import HttpException from '../exception/HttpException';
 import { CreateVerifyCardOptions, CreateVerifyCardSuccess } from '../interfaces/tap/Card';
 import { SubscriptionCreateOptions, SubscriptionCreateSuccess } from '../interfaces/tap/Subscription';
 const config = {
@@ -34,8 +35,7 @@ class TapService {
 
   private async request (apiName:string, url: string, method: Method, options?: AxiosRequestConfig, headers?: HeaderOptions) {
    
-
-try{
+    
     const value = await axios(url, {
         ...{
             method
@@ -46,30 +46,34 @@ try{
   
 
     return value
-  }catch(e){
-    if (axios.isAxiosError(e)) {
-      // do something
-      // or just re-throw the error
-      throw e;
-    } else {
-      // do something else
-      // or creating a new error
-      throw new Error(`${apiName} failed`,);
-    }
-    // const { response } = e;
-    // const { request, ...errorObject } = response; // take everything but 'request'
-    // throw new Error(JSON.stringify(errorObject.data.errors));
-  }
+  // }catch(e){
+    
+  //   const { response } = e;
+  //   const { request, ...errorObject } = response; // take everything but 'request'
+  //   console.error(errorObject.status);  // ***
+  //   console.error(errorObject.headers);
+  //   return errorObject;
+  // }
 }
     public verifyCard = async ( data: Partial <CreateVerifyCardOptions>): Promise<CreateVerifyCardSuccess> => {
      
-
+      
     
       const res = await this.request( 'Verify Card',
           `${this.baseURL}/v2/card/verify`, 'POST', {
             data
         },this.headerconfig);
-        return res.data
+        const responseData=res.data;
+        // if(responseData.hasOwnProperty('errors')){
+        //   const err=responseData.errors;
+        //   console.log(err)
+
+        //   throw new HttpException(400, 'unknown', 'message', err || []);
+        // }else{
+          return responseData;
+        // }
+      
+
       
 
 

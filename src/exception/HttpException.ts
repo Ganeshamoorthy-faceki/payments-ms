@@ -1,13 +1,21 @@
 import { HttpError } from "routing-controllers";
 
-class HttpException extends HttpError {
-    status: number;
+class HttpException extends Error {
     message: string;
-    constructor(status: number, message: string) {
-      console.log(`status:${status}`)
-      super(status,message);
-      this.status = status;
+    httpCode: number;
+    name: string;
+    errors: any[];
+    errorstack:string;
+    constructor(httpCode: number,name: string,message: string,errors?:any[],errorstack?:string) {
+      console.log(`status:${httpCode}`)
+      super(name);
+      console.log(`status:${httpCode}`)
+
       this.message = message;
+      this.httpCode=httpCode;
+      this.errors=errors;
+      this.name=name;
+      this.errorstack =errorstack;
     }
   }
    

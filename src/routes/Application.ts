@@ -71,6 +71,9 @@ export class Application{
       cors:{
         origin:"*"
       },
+      routePrefix:'/api/v1',
+      development: false,
+      defaultErrorHandler: false,
        controllers: [PaymentControllers,SubscriptionControllers, CardsControllers],
        authorizationChecker: async (action: Action, roles?: string[]) => {
       //   const token = action.request.headers["authorization"];

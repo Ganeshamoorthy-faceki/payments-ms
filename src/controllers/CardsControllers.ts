@@ -4,6 +4,7 @@ import {
 } from 'routing-controllers';
 
 import { OpenAPI, ResponseSchema,  } from 'routing-controllers-openapi';
+import HttpException from '../exception/HttpException';
 import { CurrencyCode } from '../interfaces/CurrencyCode/CurrencyCode';
 import { CreateVerifyCardOptions, CreateVerifyCardSuccess, Customer } from '../interfaces/tap';
 import { tapPaymentService } from '../services/tap.services';
@@ -22,7 +23,7 @@ import { VerifyCardReponse } from './responses/VerifyCardResponse';
 
 })
 @Authorized()
-@JsonController('/api/v1/cards/tap')
+@JsonController('/cards')
 export class CardsControllers {
 
   // @Get()
@@ -82,13 +83,13 @@ export class CardsControllers {
         customer
       }
     }
-    @Post('/verify')
+    @Post('/tap/verify')
     @OpenAPI({
         description: 'Verify a new card',
       })
     @ResponseSchema(ErrorResponse, { description: 'Unauthorized', statusCode: '401' })
     @ResponseSchema(ErrorResponse, { description: 'Access denied', statusCode: '403' })
-    public verifycard(@Body()  body: VerifyCardRequest): VerifyCardReponse | void {
+    public async verifycard(@Body()  body: VerifyCardRequest): Promise<VerifyCardReponse | void> {
       const customer={
       first_name: 'string',
       middle_name: 'string',
@@ -99,23 +100,23 @@ export class CardsControllers {
         'number': '9566721032'
       }
     }
+    console.log("testing controller")
     let url='';
-      tapPaymentService.verifyCard(this.generateVerifyCardObj(body,customer)).then((resultverify:CreateVerifyCardSuccess) =>{
+    const resultverify:CreateVerifyCardSuccess= await tapPaymentService.verifyCard(this.generateVerifyCardObj(body,customer))
+    if(resultverify.transaction.url){
+      return {url:resultverify.transaction.url}
+    }
 
-        url=resultverify.transaction.url;
-        return {url};
-      }).catch((err)=>{
-        console.log("err"+(err));
-        const errresp={
-          httpCode:400,
-          name: 'Unknown',
-          message: 'message',
-          errors: err || [],
-        }
-        // next(errresp)
-        // throw  Error(errresp.message);
-        // new Error("testing")
-      });
+      // .then((resultverify:CreateVerifyCardSuccess) =>{
+
+      //   url=resultverify.transaction.url;
+      //   return {url};
+      // }).catch((err)=>{
+      //   console.log("err::"+err.message);
+    
+      //   // throw new HttpException(400, 'unknown', 'message', JSON.parse(err.message) || [], err.stack);
+      //   // new Error("testing")
+      // });
 
      
       
