@@ -107,21 +107,42 @@ export class CardsControllers {
       return {url:resultverify.transaction.url}
     }
 
-      // .then((resultverify:CreateVerifyCardSuccess) =>{
-
-      //   url=resultverify.transaction.url;
-      //   return {url};
-      // }).catch((err)=>{
-      //   console.log("err::"+err.message);
     
-      //   // throw new HttpException(400, 'unknown', 'message', JSON.parse(err.message) || [], err.stack);
-      //   // new Error("testing")
-      // });
 
      
       
     }
 
+
+    @Get('/tap/verify/:id')
+    @OpenAPI({
+        description: 'Verify a new card',
+      })
+    @ResponseSchema(ErrorResponse, { description: 'Unauthorized', statusCode: '401' })
+    @ResponseSchema(ErrorResponse, { description: 'Access denied', statusCode: '403' })
+    public async getVerifyCard(@Param('id') id :string): Promise<VerifyCardReponse | void> {
+      const customer={
+      first_name: 'string',
+      middle_name: 'string',
+      last_name: 'string',
+      email: 'ganesha@faceki.com',
+      phone: {
+        'country_code':'91',
+        'number': '9566721032'
+      }
+    }
+    console.log("testing controller")
+    let url='';
+    const resultverify:CreateVerifyCardSuccess= await tapPaymentService.retrieveVerifyCard(id);
+    if(resultverify.transaction.url){
+      return {url:resultverify.transaction.url}
+    }
+
+    
+
+     
+      
+    }
     // @Put('/:id')
     // @OpenAPI({
     //     description: 'Update the user data',

@@ -33,7 +33,7 @@ class TapService {
   }
 
 
-  private async request (apiName:string, url: string, method: Method, options?: AxiosRequestConfig, headers?: HeaderOptions) {
+  private async request (apiName:string, url: string, method: Method,  headers?: HeaderOptions, options?: AxiosRequestConfig) {
    
     
     const value = await axios(url, {
@@ -46,46 +46,36 @@ class TapService {
   
 
     return value
-  // }catch(e){
-    
-  //   const { response } = e;
-  //   const { request, ...errorObject } = response; // take everything but 'request'
-  //   console.error(errorObject.status);  // ***
-  //   console.error(errorObject.headers);
-  //   return errorObject;
-  // }
+
 }
     public verifyCard = async ( data: Partial <CreateVerifyCardOptions>): Promise<CreateVerifyCardSuccess> => {
      
       
     
       const res = await this.request( 'Verify Card',
-          `${this.baseURL}/v2/card/verify`, 'POST', {
+          `${this.baseURL}/v2/card/verify`, 'POST',this.headerconfig, {
             data
-        },this.headerconfig);
-        const responseData=res.data;
-        // if(responseData.hasOwnProperty('errors')){
-        //   const err=responseData.errors;
-        //   console.log(err)
+        });
+          return res.data;
 
-        //   throw new HttpException(400, 'unknown', 'message', err || []);
-        // }else{
-          return responseData;
-        // }
+    }
+
+    public retrieveVerifyCard = async ( verify_id: string): Promise<CreateVerifyCardSuccess> => {
+     
       
-
-      
-
-
+    
+      const res = await this.request( 'Verify Card',
+          `${this.baseURL}/v2/card/verify/${verify_id}`, 'GET',this.headerconfig);
+          return res.data;
 
     }
 
     public tapCreateSubscription = async ( data: Partial <SubscriptionCreateOptions>): Promise<SubscriptionCreateSuccess>  => {
        
         const res = await this.request('Create Subscription',
-          `${this.baseURL}/v2/subscription/v1`, 'POST', {
+          `${this.baseURL}/v2/subscription/v1`, 'POST', this.headerconfig, {
             data
-        }, this.headerconfig);
+        });
         
         return res.data;
     }
