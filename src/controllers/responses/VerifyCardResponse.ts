@@ -1,9 +1,12 @@
 import { Expose } from 'class-transformer';
-import { IsString } from 'class-validator';
+import { IsString, IsUrl } from 'class-validator';
 
 export class VerifyCardReponse {
     
     // @Expose()
-    // @IsString()
+    @IsUrl()
     public url: string;
+
+    @IsString()
+    public verifyCardId:string;
 }

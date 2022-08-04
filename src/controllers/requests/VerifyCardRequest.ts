@@ -3,6 +3,7 @@ import { MetaData } from "../../interfaces/tap";
 import { IsOptional, IsString, IsBoolean, ValidateNested, IsEnum, ValidatorConstraint, IsObject, Validate  } from 'class-validator';
 import {Type} from 'class-transformer';
 import { IsKeyValueValidate } from "../../validations/validation";
+import { JSONSchema } from "class-validator-jsonschema";
 
 
  
@@ -24,6 +25,10 @@ export class VerifyCardRequest {
     @IsOptional()
     @IsObject()
     @Validate(IsKeyValueValidate)
+    @JSONSchema({  example:{
+        "udf1": "test1",
+        "udf2": "test2"
+      }})
     public metadata?: MetaData;
 
     @IsString()

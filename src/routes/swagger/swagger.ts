@@ -11,15 +11,15 @@ export function attachSwagger(expressApp: any) {
   });
 
   const spec2 = routingControllersToSpec(storage, {}, {
-    components: { schemas,
+    components: { 
       securitySchemes: {
         bearerAuth: {
             type: 'http',
             scheme: 'bearer',
             bearerFormat: 'JWT'
         },
-    }, },
-    info: { title: 'Users', version: '0.0.0' },
+    },schemas, },
+    info: { title: 'Payments MS', version: '0.0.0' },
   });
   console.log(JSON.stringify(spec2))
   expressApp.use('/docs', swaggerUi.serve, swaggerUi.setup(spec2));

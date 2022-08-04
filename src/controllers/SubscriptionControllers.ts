@@ -83,6 +83,18 @@ export class SubscriptionControllers {
         return [];
     }
 
+    @Get('/tap/:subId')
+    @OpenAPI({
+        description: 'Get Tap Subscription details',
+      })
+    @ResponseSchema(ErrorResponse, { description: 'Unauthorized', statusCode: '401' })
+    @ResponseSchema(ErrorResponse, { description: 'Access denied', statusCode: '403' })
+    public getTapSubscription(@Param("subId") subId:string)  : any {
+       
+
+        return [];
+    }
+
     // @Put('/:id')
     // @OpenAPI({
     //     description: 'Update the user data',
@@ -95,7 +107,7 @@ export class SubscriptionControllers {
     //     return [];
     // }
 
-    @Delete('/:id')
+    @Delete('/tap/:subId')
     @ResponseSchema(SuccessResponse, { description: 'disabled user' })
     @ResponseSchema(ErrorResponse, { description: 'Unauthorized', statusCode: '401' })
     @ResponseSchema(ErrorResponse, { description: 'Access denied', statusCode: '403' })
@@ -107,7 +119,23 @@ export class SubscriptionControllers {
           },
         },
       })
-    public delete(@Param('id') id: string): any {
+    public cancelTapSubscription(@Param('subId') id: string): any {
+        return [];
+    }
+
+    @Delete('/paypal/:subId')
+    @ResponseSchema(SuccessResponse, { description: 'disabled user' })
+    @ResponseSchema(ErrorResponse, { description: 'Unauthorized', statusCode: '401' })
+    @ResponseSchema(ErrorResponse, { description: 'Access denied', statusCode: '403' })
+    @OpenAPI({
+        description: 'Cancel Paypal subscription',
+        responses: {
+          '400': {
+            description: 'Bad request',
+          },
+        },
+      })
+    public cancelPaypalSubscription(@Param('subId') id: string): any {
         return [];
     }
 

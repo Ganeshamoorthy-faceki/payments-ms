@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig, Method } from 'axios'
 import HttpException from '../exception/HttpException';
-import { CreateVerifyCardOptions, CreateVerifyCardSuccess } from '../interfaces/tap/Card';
-import { SubscriptionCreateOptions, SubscriptionCreateSuccess } from '../interfaces/tap/Subscription';
+import { CreateVerifyCardOptions, CreateVerifyCardSuccess, TapCard, CardsList, DeleteCardResponse } from '../interfaces/tap/Card';
+import { CancelSubscriptionDetails, GetSubscriptionDetails, SubscriptionCreateOptions, SubscriptionCreateSuccess, UpdateSubscription } from '../interfaces/tap/Subscription';
 const config = {
     headers: { Authorization: `Bearer sk_test_XKokBfNWv6FIYuTMg5sLPjhJ`,
     'Content-Type': 'application/json'} 
@@ -70,6 +70,39 @@ class TapService {
 
     }
 
+
+    public getAllCards = async ( customerId:string): Promise<CardsList> => {
+     
+      
+    
+      const res = await this.request( 'Get all cards',
+          `${this.baseURL}/v2/card/${customerId}`, 'GET',this.headerconfig);
+          return res.data;
+
+    }
+
+    public getCard = async ( customerId:string, cardId:string): Promise<TapCard> => {
+     
+      
+    
+      const res = await this.request( 'Get Card',
+          `${this.baseURL}/v2/card/${customerId}/${cardId}`, 'GET',this.headerconfig);
+          return res.data;
+
+    }
+
+    public deleteCard = async ( customerId:string, cardId:string): Promise<DeleteCardResponse> => {
+     
+      
+    
+      const res = await this.request( 'Delete Card',
+          `${this.baseURL}/v2/card/${customerId}/${cardId}`, 'DELETE',this.headerconfig);
+          return res.data;
+
+    }
+    
+    
+
     public tapCreateSubscription = async ( data: Partial <SubscriptionCreateOptions>): Promise<SubscriptionCreateSuccess>  => {
        
         const res = await this.request('Create Subscription',
@@ -79,6 +112,40 @@ class TapService {
         
         return res.data;
     }
+
+    public getTapSubscription = async ( subId:string ): Promise<GetSubscriptionDetails>  => {
+       
+      const res = await this.request('Get Subscription',
+        `${this.baseURL}/v2/subscription/v1/${subId}`, 'GET', this.headerconfig);
+      
+      return res.data;
+  }
+
+  public getAllTapSubscription = async ( subId:string ): Promise<GetSubscriptionDetails>  => {
+       
+    const res = await this.request('Get All Subscriptions',
+      `${this.baseURL}/v2/subscription/v1/list`, 'POST', this.headerconfig);
+    
+    return res.data;
+}
+
+public cancelTapSubscription = async ( subId:string ): Promise<CancelSubscriptionDetails>  => {
+       
+  const res = await this.request('Cancel Subscription',
+    `${this.baseURL}/v2/subscription/v1/${subId}`, 'DELETE', this.headerconfig);
+  
+  return res.data;
+}
+
+  public updateTapSubscription = async ( data:UpdateSubscription ): Promise<GetSubscriptionDetails>  => {
+       
+    const res = await this.request('Create Subscription',
+      `${this.baseURL}/v2/subscription/v1/`, 'GET', this.headerconfig,{data});
+    
+    return res.data;
+}
+
+    
 }
 
 export const tapPaymentService = new TapService({

@@ -6,12 +6,13 @@ import {
 import { OpenAPI, ResponseSchema,  } from 'routing-controllers-openapi';
 import HttpException from '../exception/HttpException';
 import { CurrencyCode } from '../interfaces/CurrencyCode/CurrencyCode';
-import { CreateVerifyCardOptions, CreateVerifyCardSuccess, Customer } from '../interfaces/tap';
+import { CardsList, CreateVerifyCardOptions, CreateVerifyCardSuccess, Customer, DeleteCardResponse, TapCard } from '../interfaces/tap';
 import { tapPaymentService } from '../services/tap.services';
 import { VerifyCardRequest } from './requests/VerifyCardRequest';
 import { ErrorResponse } from './responses/ErrorResponse';
 import { SuccessResponse } from './responses/SuccessResponse';
 import { VerifyCardReponse } from './responses/VerifyCardResponse';
+import { VerifyCardSuccessResponse } from './responses/VerifyCardSuccessResponse';
 
 
 
@@ -73,7 +74,7 @@ export class CardsControllers {
         threeDSecure:true,
         save_card: true,
         redirect: {
-          url: 'http://localhost:8080'
+          url: 'http://nodejs.faceki.com/api/v1/webohook/tap'
         },
         source: {
           id: body.tokenId
@@ -87,9 +88,10 @@ export class CardsControllers {
     @OpenAPI({
         description: 'Verify a new card',
       })
+      @ResponseSchema(VerifyCardReponse, {statusCode:'200'})
     @ResponseSchema(ErrorResponse, { description: 'Unauthorized', statusCode: '401' })
     @ResponseSchema(ErrorResponse, { description: 'Access denied', statusCode: '403' })
-    public async verifycard(@Body()  body: VerifyCardRequest): Promise<VerifyCardReponse | void> {
+    public async verifycard(@Body()  body: VerifyCardRequest): Promise<VerifyCardReponse > {
       const customer={
       first_name: 'string',
       middle_name: 'string',
@@ -104,7 +106,9 @@ export class CardsControllers {
     let url='';
     const resultverify:CreateVerifyCardSuccess= await tapPaymentService.verifyCard(this.generateVerifyCardObj(body,customer))
     if(resultverify.transaction.url){
-      return {url:resultverify.transaction.url}
+      return {url:resultverify.transaction.url,
+        verifyCardId:resultverify.id 
+      }
     }
 
     
@@ -114,34 +118,58 @@ export class CardsControllers {
     }
 
 
-    @Get('/tap/verify/:id')
+    @Get('/tap/verify/:verifyCardId')
+    @OpenAPI({
+        description: 'Get the Verify Card details',
+      })
+    @ResponseSchema(VerifyCardSuccessResponse, {statusCode:'200'})
+    @ResponseSchema(ErrorResponse, { description: 'Unauthorized', statusCode: '401' })
+    @ResponseSchema(ErrorResponse, { description: 'Access denied', statusCode: '403' })
+    public async getVerifyCard(@Param('verifyCardId') id :string): Promise<CreateVerifyCardSuccess> {
+      
+    const resultverify:CreateVerifyCardSuccess= await tapPaymentService.retrieveVerifyCard(id);
+    return resultverify;
+
+    }
+
+    @Get('/tap/:userId')
     @OpenAPI({
         description: 'Verify a new card',
       })
     @ResponseSchema(ErrorResponse, { description: 'Unauthorized', statusCode: '401' })
     @ResponseSchema(ErrorResponse, { description: 'Access denied', statusCode: '403' })
-    public async getVerifyCard(@Param('id') id :string): Promise<VerifyCardReponse | void> {
-      const customer={
-      first_name: 'string',
-      middle_name: 'string',
-      last_name: 'string',
-      email: 'ganesha@faceki.com',
-      phone: {
-        'country_code':'91',
-        'number': '9566721032'
-      }
-    }
-    console.log("testing controller")
-    let url='';
-    const resultverify:CreateVerifyCardSuccess= await tapPaymentService.retrieveVerifyCard(id);
-    if(resultverify.transaction.url){
-      return {url:resultverify.transaction.url}
-    }
-
-    
-
-     
+    public async getUserCards(@Param('userId') id :string): Promise<CardsList> {
       
+    const resultverify:CardsList= await tapPaymentService.getAllCards(id);
+    return resultverify;
+
+    }
+
+    @Get('/tap/:userId/:cardId')
+    @OpenAPI({
+        description: 'Get a specific card',
+      })
+    @ResponseSchema(ErrorResponse, { description: 'Unauthorized', statusCode: '401' })
+    @ResponseSchema(ErrorResponse, { description: 'Access denied', statusCode: '403' })
+    public async getUserCard(@Param('userId') userId :string,@Param('cardId') cardId: string): Promise<TapCard> {
+      
+    const resultverify:TapCard= await tapPaymentService.getCard(userId,cardId);
+    return resultverify;
+
+    }
+
+
+    @Delete('/tap/:userId/:cardId')
+    @OpenAPI({
+        description: 'Delete a specific card',
+      })
+    @ResponseSchema(ErrorResponse, { description: 'Unauthorized', statusCode: '401' })
+    @ResponseSchema(ErrorResponse, { description: 'Access denied', statusCode: '403' })
+    public async deleteUserCard(@Param('userId') userId :string,@Param('cardId') cardId: string): Promise<DeleteCardResponse> {
+      
+    const resultverify:DeleteCardResponse= await tapPaymentService.deleteCard(userId,cardId);
+    return resultverify;
+
     }
     // @Put('/:id')
     // @OpenAPI({

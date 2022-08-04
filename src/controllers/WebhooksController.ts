@@ -9,10 +9,7 @@ import { SuccessResponse } from './responses/SuccessResponse';
 
 
 @OpenAPI({
-    tags: ['Subscription'],
-    security: [
-      { BearerAuth: [] }
-    ], 
+    tags: ['Webhooks'], 
 
 })
 @Authorized()
@@ -65,7 +62,7 @@ export class WebhooksControllers {
       })
     @ResponseSchema(ErrorResponse, { description: 'Unauthorized', statusCode: '401' })
     @ResponseSchema(ErrorResponse, { description: 'Access denied', statusCode: '403' })
-    public createPaypalSubscription(@Body({required:true,validate:true})  body: any): any {
+    public webhookPaypal(@Body({required:true,validate:true})  body: any): any {
        
 
         return [];
@@ -77,7 +74,7 @@ export class WebhooksControllers {
       })
     @ResponseSchema(ErrorResponse, { description: 'Unauthorized', statusCode: '401' })
     @ResponseSchema(ErrorResponse, { description: 'Access denied', statusCode: '403' })
-    public createTapSubscription(@Body({required:true,validate:true})  body: any): any {
+    public webhookTap(@Body({required:true,validate:true})  body: any): any {
        
 
         return [];

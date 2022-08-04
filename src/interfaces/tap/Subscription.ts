@@ -1,4 +1,5 @@
 import { integer } from 'aws-sdk/clients/cloudfront'
+import { boolean, string } from 'yup';
 import { CurrencyCode } from '../CurrencyCode/CurrencyCode'
 import { CustomerGetOption } from './Customer'
 
@@ -12,6 +13,8 @@ export interface Term{
     due: number;
     auto_renew: number;
     timezone:string;
+    count?:number;
+    days_until_due?:number;
 }
 
 export interface Trial{
@@ -28,7 +31,7 @@ export interface Reference{
     order: string;
 }
 
-export interface Reciept{
+export interface Receipt{
     email: boolean;
     sms: boolean;
 }
@@ -54,11 +57,19 @@ export interface Charge{
     source: Source;
     post : POST;
     reference: Reference;
-    reciept: Reciept;
+    receipt: Receipt;
     metadata: MetaData;
     subscription_id?: string;
     redirect?: Redirect;
+    
 
+}
+
+export interface ChargeObj{
+    date:string;
+    charge_id:string;
+    status:string;
+    Created:string;
 }
 
 export interface Redirect{
@@ -73,6 +84,22 @@ export interface SubscriptionCreateOptions {
     charge: Charge;
 }
 
+export interface GetSubscriptionDetails {
+    live_mode:boolean;
+    Object:"Subscription";
+    api_version:string;
+    feature_version:string;
+    subscription: Subscription;
+}
+
+export interface CancelSubscriptionDetails {
+    id:string;
+    live_mode:boolean;
+    object:"Subscription";
+    api_version:string;
+    feature_version:string;
+    status: string;
+}
 export interface SubscriptionCreateSuccess {
     id: string
     status: string
@@ -86,7 +113,24 @@ export interface Subscription {
     id: string
     status: string
     merchant_id: string
+    amount?:string;
+    currency?:CurrencyCode;
     term: Term;
-    trial:Trial;
-    charge: Charge;
+    trial?:Trial;
+    charges?: ChargeObj[];
+    charge?: Charge;
+
+}
+
+export interface UpdateSubscription{
+    subscription_id:string;
+    amount:number;
+    "auto-renew":boolean;
+    description:string;
+    statement_descriptor:string;
+    metadata:MetaData;
+    reference: Reference;
+    receipt:Receipt;
+    post: POST;
+
 }

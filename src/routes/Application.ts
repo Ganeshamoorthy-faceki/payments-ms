@@ -10,6 +10,7 @@ import { SubscriptionControllers } from '../controllers/SubscriptionControllers'
 import { CardsControllers } from '../controllers/CardsControllers';
 import { AuthMiddleware } from '../middlewares/AuthMiddleware';
 import { ErrorHandlerMiddleware } from '../middlewares/ErrorHandlerMiddleware';
+import { WebhooksControllers } from '../controllers/WebhooksController';
 // import CognitoExpress from 'cognito-express';
 
 
@@ -74,7 +75,7 @@ export class Application{
       routePrefix:'/api/v1',
       development: false,
       defaultErrorHandler: false,
-       controllers: [PaymentControllers,SubscriptionControllers, CardsControllers],
+       controllers: [PaymentControllers,SubscriptionControllers, CardsControllers,WebhooksControllers],
        authorizationChecker: async (action: Action, roles?: string[]) => {
       //   const token = action.request.headers["authorization"];
       //   if (action.request.method=="POST" || action.request.method=="GET"){
