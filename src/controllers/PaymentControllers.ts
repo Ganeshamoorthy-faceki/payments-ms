@@ -16,7 +16,7 @@ import { SuccessResponse } from './responses/SuccessResponse';
 
 })
 @Authorized()
-@JsonController('/api/v1/payments')
+@JsonController('/payments')
 export class PaymentControllers {
 
   @Get()

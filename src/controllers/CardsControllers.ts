@@ -74,7 +74,7 @@ export class CardsControllers {
         threeDSecure:true,
         save_card: true,
         redirect: {
-          url: 'http://nodejs.faceki.com/api/v1/webohook/tap'
+          url: 'http://nodejs.faceki.com/api/v1/webhook/tap'
         },
         source: {
           id: body.tokenId
@@ -202,6 +202,3 @@ export class CardsControllers {
 }
 
 
-// const storage = getMetadataArgsStorage()
-// const spec = routingControllersToSpec(storage)
-// console.log(JSON.stringify(spec))

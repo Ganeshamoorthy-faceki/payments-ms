@@ -3,6 +3,9 @@ import {
 } from 'routing-controllers';
 
 import { OpenAPI, ResponseSchema,  } from 'routing-controllers-openapi';
+import { CurrencyCode } from '../interfaces/CurrencyCode/CurrencyCode';
+import { SubscriptionCreateOptions, SubscriptionCreateSuccess } from '../interfaces/tap';
+import { tapPaymentService } from '../services/tap.services';
 import { ErrorResponse } from './responses/ErrorResponse';
 import { SuccessResponse } from './responses/SuccessResponse';
 
@@ -16,7 +19,7 @@ import { SuccessResponse } from './responses/SuccessResponse';
 
 })
 @Authorized()
-@JsonController('/api/v1/subscription')
+@JsonController('/subscription')
 export class SubscriptionControllers {
 
   // @Get()
@@ -77,10 +80,51 @@ export class SubscriptionControllers {
       })
     @ResponseSchema(ErrorResponse, { description: 'Unauthorized', statusCode: '401' })
     @ResponseSchema(ErrorResponse, { description: 'Access denied', statusCode: '403' })
-    public createTapSubscription(@Body({required:true,validate:true})  body: any): any {
-       
-
-        return [];
+    public async createTapSubscription(@Body({required:true,validate:true})  body: {customerId:string, cardId:string}): Promise<any> {
+       const term={
+        interval: "DAILY",
+        period: 0,
+        from: new Date().toISOString().slice(0,-5),
+        due: 0,
+        auto_renew: true,
+        timezone:"GMT",
+  
+       }
+       const trial={
+        days:0,
+        amount:0.1
+       }
+       const charge={
+        "amount": 1,
+        "currency": CurrencyCode.USD,
+        "description": "Test Subscription",
+        "statement_description": "Sample",
+        "metadata": {
+          "udf1": "test 1",
+          "udf2": "test 2"
+        },
+        "receipt": {
+          "email": true,
+          "sms": true
+        },
+        "customer": {
+          "id": body.customerId
+        },
+        "source": {
+          "id": body.cardId
+        },
+        "post": {
+          "url": "http://nodejs.faceki.com/webhooks/tap"
+        }
+       }
+       const subscription={
+        term,
+        trial,
+        charge
+       }
+      const resultverify:SubscriptionCreateSuccess= await tapPaymentService.tapCreateSubscription(subscription);
+      console.log(resultverify)
+      return resultverify;
     }
 
     @Get('/tap/:subId')
@@ -119,8 +163,10 @@ export class SubscriptionControllers {
           },
         },
       })
-    public cancelTapSubscription(@Param('subId') id: string): any {
-        return [];
+    public async cancelTapSubscription(@Param('subId') id: string): Promise<any> {
+        const response= await tapPaymentService.cancelTapSubscription(id);
+        console.log(response)
+        return response;
     }
 
     @Delete('/paypal/:subId')
@@ -140,8 +186,3 @@ export class SubscriptionControllers {
     }
 
 }
-
-
-// const storage = getMetadataArgsStorage()
-// const spec = routingControllersToSpec(storage)
-// console.log(JSON.stringify(spec))

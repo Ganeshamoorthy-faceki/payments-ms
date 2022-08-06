@@ -7,11 +7,11 @@ import { CustomerGetOption } from './Customer'
 
 
 export interface Term{
-    interval: "DAILY" | "WEEKLY" | "MONTHLY" | "BIMONTHLY" | "QUARTERLY" | "HALFYEARLY" | "YEARLY",
+    interval: string,//"DAILY" | "WEEKLY" | "MONTHLY" | "BIMONTHLY" | "QUARTERLY" | "HALFYEARLY" | "YEARLY"
     period: number;
     from: string;
     due: number;
-    auto_renew: number;
+    auto_renew: boolean;
     timezone:string;
     count?:number;
     days_until_due?:number;
@@ -56,9 +56,9 @@ export interface Charge{
     customer: CustomerGetOption;
     source: Source;
     post : POST;
-    reference: Reference;
+    reference?: Reference;
     receipt: Receipt;
-    metadata: MetaData;
+    metadata?: MetaData;
     subscription_id?: string;
     redirect?: Redirect;
     

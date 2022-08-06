@@ -139,17 +139,19 @@ public cancelTapSubscription = async ( subId:string ): Promise<CancelSubscriptio
 
   public updateTapSubscription = async ( data:UpdateSubscription ): Promise<GetSubscriptionDetails>  => {
        
-    const res = await this.request('Create Subscription',
+    const res = await this.request('Update Subscription',
       `${this.baseURL}/v2/subscription/v1/`, 'GET', this.headerconfig,{data});
     
     return res.data;
 }
+
+
 
     
 }
 
 export const tapPaymentService = new TapService({
   sandboxMode:true,
-  secretApiKey:"sk_test_VgZwpx82WuJ7UESzhcGNKqRl",//sk_live_ivhobN3YMV2B7Xp1xUeJTzn4
+  secretApiKey:"sk_live_ivhobN3YMV2B7Xp1xUeJTzn4",// sk_test_VgZwpx82WuJ7UESzhcGNKqRl
 });
 

@@ -76,7 +76,7 @@ export class WebhooksControllers {
     @ResponseSchema(ErrorResponse, { description: 'Access denied', statusCode: '403' })
     public webhookTap(@Body({required:true,validate:true})  body: any): any {
        
-
+        console.log(body);
         return [];
     }
 

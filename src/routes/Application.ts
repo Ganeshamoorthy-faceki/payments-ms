@@ -98,7 +98,7 @@ export class Application{
       middlewares:[LoggingMiddleware,  SecurityMiddleware, ErrorHandlerMiddleware]
     }); 
     attachSwagger(this.app);
-   
+
     this.app.listen(port,
       () => {
           logger.info(`
