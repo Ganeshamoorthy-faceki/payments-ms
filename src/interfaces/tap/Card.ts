@@ -6,6 +6,7 @@ export interface CreateVerifyCardOptions {
     currency: CurrencyCode;
     threeDSecure:boolean;
     save_card: boolean;
+    live_mode?:boolean;
     redirect: Redirect;
     source: Source;
     medadata:MetaData;

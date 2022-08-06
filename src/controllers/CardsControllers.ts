@@ -73,8 +73,9 @@ export class CardsControllers {
         currency: CurrencyCode.USD,
         threeDSecure:true,
         save_card: true,
+        live_mode:true,
         redirect: {
-          url: 'http://nodejs.faceki.com/api/v1/webhook/tap'
+          url: 'http://faceki.com/nbb/tap.html'
         },
         source: {
           id: body.tokenId
